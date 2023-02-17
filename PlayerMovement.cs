@@ -19,6 +19,7 @@ namespace playerCont
         //private bool grounded;
         private BoxCollider2D boxCollider;
         private float wallJumpCooldown;
+        private float horizontalInput;
 
         private void Awake()
         { 
@@ -29,14 +30,14 @@ namespace playerCont
         }
         void Update()
         {
-            float horizontalInput = Input.GetAxis("Horizontal");
+            horizontalInput = Input.GetAxis("Horizontal");
             body.velocity = new Vector2( horizontalInput * speed, body.velocity.y);
 
             //Karakteri sag sola dondurmek icin
             if (horizontalInput > 0.01f)
-                transform.localScale = new Vector3(8,8,8);
+                transform.localScale = new Vector3(6,6,6);
             else if (horizontalInput < -0.01f)
-                transform.localScale = new Vector3(-8, 8, 8);
+                transform.localScale = new Vector3(-6, 6, 6);
 
 
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
@@ -46,7 +47,8 @@ namespace playerCont
             anim.SetBool("Run", horizontalInput != 0);
             anim.SetBool("Grounded", isGrounded());
 
-            if(wallJumpCooldown <= 0.2f )
+            //Ziplama iþlemleri
+            if(wallJumpCooldown < 0.2f )
             {
 
 
@@ -60,7 +62,7 @@ namespace playerCont
                 else
                     body.gravityScale = 7;
 
-                if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
+                if (Input.GetKeyDown(KeyCode.Space))
                     Jump();
             }
             else
@@ -77,7 +79,18 @@ namespace playerCont
             }
             else if (onWall() && !isGrounded())
             {
+                if(horizontalInput == 0)
+                {
+                    body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 6,0);
+                    transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y,transform.localScale.z );
 
+                }
+                else
+                {
+                    body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
+
+                }
+                wallJumpCooldown = 0;
             }
             
         }

@@ -35,10 +35,9 @@ namespace playerCont
 
             //Karakteri sag sola dondurmek icin
             if (horizontalInput > 0.01f)
-                transform.localScale = new Vector3(6,6,6);
+                transform.localScale = Vector3.one;
             else if (horizontalInput < -0.01f)
-                transform.localScale = new Vector3(-6, 6, 6);
-
+                transform.localScale = new Vector3(-1, 1, 1);
 
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
                 Jump();
@@ -48,10 +47,8 @@ namespace playerCont
             anim.SetBool("Grounded", isGrounded());
 
             //Ziplama iþlemleri
-            if(wallJumpCooldown < 0.2f )
+            if (wallJumpCooldown > 0.2f)
             {
-
-
                 body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
 
                 if (onWall() && !isGrounded())
@@ -62,12 +59,12 @@ namespace playerCont
                 else
                     body.gravityScale = 7;
 
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKey(KeyCode.Space))
                     Jump();
             }
             else
                 wallJumpCooldown += Time.deltaTime;
-        
+
         }
 
         private void Jump()
@@ -79,20 +76,16 @@ namespace playerCont
             }
             else if (onWall() && !isGrounded())
             {
-                if(horizontalInput == 0)
+                if (horizontalInput == 0)
                 {
-                    body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 6,0);
-                    transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y,transform.localScale.z );
-
+                    body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 10, 0);
+                    transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                 }
                 else
-                {
                     body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
 
-                }
                 wallJumpCooldown = 0;
             }
-            
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -109,11 +102,15 @@ namespace playerCont
         }
         private bool onWall()
         {
-            RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0,new Vector2(transform.localScale.x,0), 0.1f, wallLayer);
-
-
+            RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
             return raycastHit.collider != null;
         }
+
+        public bool canAttack()
+        {
+            return horizontalInput == 0 && isGrounded() && !onWall();
+        }
+
     }
 
 }

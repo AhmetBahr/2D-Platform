@@ -1,3 +1,4 @@
+using fireball;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ namespace playerCont
     public class Player_Attack : MonoBehaviour
     {
         [SerializeField] private float attackCooldown;
+        [SerializeField] private Transform attackPoint;
+        [SerializeField] private GameObject[] fireballs;
+
         private Animator anim;
         private PlayerMovement playerMovement;
         private float cooldownTimer = Mathf.Infinity;
@@ -31,9 +35,23 @@ namespace playerCont
         private void Attack()
         {
             anim.SetTrigger("Attack");
-            cooldownTimer = 0; 
+            cooldownTimer = 0;
+
+
+            fireballs[findFireball()].transform.position = attackPoint.position;
+            fireballs[findFireball()].GetComponent<Fireball>().setDirection(Mathf.Sign(transform.localScale.x));
+
         }
 
+        private int findFireball()
+        {
+            for(int i = 0; i<fireballs.Length; i++)
+            {
+                if (!fireballs[i].activeInHierarchy)
+                    return i;
+            }
+            return 0;
+        }
 
     }
 }

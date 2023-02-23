@@ -19,11 +19,11 @@ public class Cam_Control : MonoBehaviour
     private void Update()
     {
         //Oda oda gecmek icin
-        // transform.position = Vector3.SmoothDamp(transform.position, new Vector3(currentPosX, transform.position.y, transform.position.z), ref velocity, speed );
+         transform.position = Vector3.SmoothDamp(transform.position, new Vector3(currentPosX, transform.position.y, transform.position.z), ref velocity, speed );
 
-        transform.position = new Vector3(player.position.x + lookAhead, transform.position.y, transform.position.z);
+      /*  transform.position = new Vector3(player.position.x + lookAhead, transform.position.y, transform.position.z);
         lookAhead = Mathf.Lerp(lookAhead, (aheadDistance * player.localScale.x), Time.deltaTime * cameraSpeed);
-
+      */
     }
 
     public void Move_To_Newroom(Transform _newRoom)

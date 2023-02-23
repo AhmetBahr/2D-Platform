@@ -1,4 +1,5 @@
 using playerCont;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,12 +43,19 @@ public class Health : MonoBehaviour
 
 
     }
-
+    
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
             TakeDamage(1);
     }
+    */
 
+    public void AddHealth(float _value)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
+
+    }
 
 }

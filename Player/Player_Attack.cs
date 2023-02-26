@@ -1,4 +1,3 @@
-using fireball;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,7 +38,7 @@ namespace playerCont
 
 
             fireballs[findFireball()].transform.position = attackPoint.position;
-            fireballs[findFireball()].GetComponent<Fireball>().setDirection(Mathf.Sign(transform.localScale.x));
+            fireballs[findFireball()].GetComponent<Projectiles>().setDirection(Mathf.Sign(transform.localScale.x));
 
         }
 

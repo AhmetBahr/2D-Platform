@@ -16,6 +16,9 @@ public class Firetrapt : MonoBehaviour
     private bool triggered; // Ne zaman tetiklenecek
     private bool active; //Ne zaman saldýrýya hazýr hale gelicek    
 
+    private Health playerHealth;
+
+
     private void Awake()
     {
         anim = GetComponent<Animator> ();
@@ -23,12 +26,20 @@ public class Firetrapt : MonoBehaviour
 
 
     }
+    private void Update()
+    {
+        if (playerHealth != null && active)
+            playerHealth.TakeDamage(damage);
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Player")
         {
-            if(!triggered)
+            playerHealth = collision.GetComponent<Health>();
+
+            if (!triggered)
             {
                 StartCoroutine(ActivateFiretrap());
             }
@@ -38,6 +49,12 @@ public class Firetrapt : MonoBehaviour
             }
         }
 
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+            playerHealth = null;
     }
 
     private IEnumerator ActivateFiretrap()

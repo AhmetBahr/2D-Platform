@@ -15,8 +15,15 @@ namespace playerCont
 
         [Header("Coyote Time")]
         [SerializeField] private float coyoteTime; 
-        private float coyoteCounter; 
+        private float coyoteCounter;
 
+        [Header("Multiple Jump")]
+        [SerializeField] private int extraJyump;
+        private int jumpCounter;
+
+        [Header("Wall Jumping")]
+        [SerializeField] private float wallJumpX; 
+        [SerializeField] private float wallJumpY;
 
         [Header("Layer")]
         [SerializeField] private LayerMask groundLayer;
@@ -74,7 +81,7 @@ namespace playerCont
                 if(isGrounded())
                 {
                     coyoteCounter = coyoteTime;
-
+                    jumpCounter = extraJyump;
                 }
                 else
                 {
@@ -92,7 +99,7 @@ namespace playerCont
 
         private void Jump()
         {
-            if (coyoteCounter <= 0 && !onWall()) return;
+            if (coyoteCounter <= 0 && !onWall() && jumpCounter <=0) return;
 
             if (onWall())
                 WallJump();
@@ -102,11 +109,20 @@ namespace playerCont
                     body.velocity = new Vector2(body.velocity.x, jumpPower);
                 else
                 {
-                    if (coyoteTime > 0)
+                    if (coyoteCounter > 0)
                         body.velocity = new Vector2(body.velocity.x, jumpPower);
+                    else
+                    {
+                        if(jumpCounter > 0)
+                        {
+                            body.velocity = new Vector2(body.velocity.x, jumpPower);
+                            jumpCounter--;
+                        }
+                    }
+
                 }
 
-                coyoteCounter = 0;
+                coyoteCounter = 0;   
             }
 
             
@@ -115,7 +131,8 @@ namespace playerCont
 
         private void WallJump()
         {
-
+            body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX, wallJumpY));
+            wallJumpCooldown = 0;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

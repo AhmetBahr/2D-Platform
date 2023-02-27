@@ -8,15 +8,23 @@ namespace playerCont
     public class PlayerMovement : MonoBehaviour
     {
 
+        [Header("Movement")]
         [SerializeField] private float speed;
         [SerializeField] private float jumpPower;
+ 
+
+        [Header("Coyote Time")]
+        [SerializeField] private float coyoteTime; 
+        private float coyoteCounter; 
+
+
+        [Header("Layer")]
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private LayerMask wallLayer;
 
 
         private Rigidbody2D body;
         private Animator anim;
-        //private bool grounded;
         private BoxCollider2D boxCollider;
         private float wallJumpCooldown;
         private float horizontalInput;
@@ -39,53 +47,75 @@ namespace playerCont
             else if (horizontalInput < -0.01f)
                 transform.localScale = new Vector3(-1, 1, 1);
 
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
-                Jump();
+
 
             //Animator parametreleri
             anim.SetBool("Run", horizontalInput != 0);
             anim.SetBool("Grounded", isGrounded());
 
             //Ziplama iþlemleri
-            if (wallJumpCooldown > 0.2f)
+
+            if (Input.GetKeyDown(KeyCode.Space))
+                Jump();
+            
+            if (Input.GetKeyUp(KeyCode.Space) && body.velocity.y > 0)
+                body.velocity = new Vector2(body.velocity.x, body.velocity.y/2);
+
+            if (onWall())
             {
-                body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
-
-                if (onWall() && !isGrounded())
-                {
-                    body.gravityScale = 0;
-                    body.velocity = Vector2.zero;
-                }
-                else
-                    body.gravityScale = 7;
-
-                if (Input.GetKey(KeyCode.Space))
-                    Jump();
+                body.gravityScale = 0;
+                body.velocity = Vector2.zero;
             }
             else
-                wallJumpCooldown += Time.deltaTime;
+            {
+                body.gravityScale = 7;
+                body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+
+                if(isGrounded())
+                {
+                    coyoteCounter = coyoteTime;
+
+                }
+                else
+                {
+                    coyoteCounter -= Time.deltaTime;
+                }
+
+
+            }
+
+
+
+
 
         }
 
         private void Jump()
         {
-            if (isGrounded())
-            {
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                anim.SetTrigger("Jump");
-            }
-            else if (onWall() && !isGrounded())
-            {
-                if (horizontalInput == 0)
-                {
-                    body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 10, 0);
-                    transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-                }
-                else
-                    body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
+            if (coyoteCounter <= 0 && !onWall()) return;
 
-                wallJumpCooldown = 0;
+            if (onWall())
+                WallJump();
+            else
+            {
+                if (isGrounded())
+                    body.velocity = new Vector2(body.velocity.x, jumpPower);
+                else
+                {
+                    if (coyoteTime > 0)
+                        body.velocity = new Vector2(body.velocity.x, jumpPower);
+                }
+
+                coyoteCounter = 0;
             }
+
+            
+
+        }
+
+        private void WallJump()
+        {
+
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

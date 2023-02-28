@@ -30,11 +30,21 @@ namespace playerCont
         [SerializeField] private LayerMask wallLayer;
 
 
+        [Header("Dash")]
+        [SerializeField] private float DashForce;
+        [SerializeField] private float DashCoolDown;
+        [SerializeField] private float StartDashTimer;
+        private float currentDashTimer;
+        private bool isDashing;
+
+
+
         private Rigidbody2D body;
         private Animator anim;
         private BoxCollider2D boxCollider;
         private float wallJumpCooldown;
         private float horizontalInput;
+        private float cooldownTimer = Mathf.Infinity;
 
         private void Awake()
         { 
@@ -42,11 +52,14 @@ namespace playerCont
             body = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();   
             boxCollider= GetComponent<BoxCollider2D>();
+      
+
         }
+
         void Update()
         {
             horizontalInput = Input.GetAxis("Horizontal");
-            body.velocity = new Vector2( horizontalInput * speed, body.velocity.y);
+            body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
 
             //Karakteri sag sola dondurmek icin
             if (horizontalInput > 0.01f)
@@ -61,12 +74,11 @@ namespace playerCont
             anim.SetBool("Grounded", isGrounded());
 
             //Ziplama iþlemleri
-
             if (Input.GetKeyDown(KeyCode.Space))
                 Jump();
-            
+
             if (Input.GetKeyUp(KeyCode.Space) && body.velocity.y > 0)
-                body.velocity = new Vector2(body.velocity.x, body.velocity.y/2);
+                body.velocity = new Vector2(body.velocity.x, body.velocity.y / 2);
 
             if (onWall())
             {
@@ -78,7 +90,7 @@ namespace playerCont
                 body.gravityScale = 7;
                 body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
 
-                if(isGrounded())
+                if (isGrounded())
                 {
                     coyoteCounter = coyoteTime;
                     jumpCounter = extraJyump;
@@ -87,14 +99,36 @@ namespace playerCont
                 {
                     coyoteCounter -= Time.deltaTime;
                 }
+            }
 
+            //Dash
+            if (Input.GetKeyDown(KeyCode.E) && cooldownTimer > DashCoolDown)
+                Dash();
+
+            cooldownTimer += Time.deltaTime;
+
+            if (isDashing)
+            {
+                if (horizontalInput > 0.01f)
+                    body.velocity = Vector2.right * DashForce;
+                else if (horizontalInput < -0.01f)
+                    body.velocity = Vector2.left * DashForce;
+
+                currentDashTimer -= Time.deltaTime;
+                if (currentDashTimer <= 0)
+                {
+                    isDashing = false;
+                }
 
             }
 
+        }
 
-
-
-
+        private void Dash()
+        {
+            isDashing = true;
+            currentDashTimer = StartDashTimer;
+            cooldownTimer = 0;
         }
 
         private void Jump()
@@ -113,19 +147,15 @@ namespace playerCont
                         body.velocity = new Vector2(body.velocity.x, jumpPower);
                     else
                     {
-                        if(jumpCounter > 0)
+                        if (jumpCounter > 0)
                         {
                             body.velocity = new Vector2(body.velocity.x, jumpPower);
                             jumpCounter--;
                         }
                     }
-
                 }
-
                 coyoteCounter = 0;   
             }
-
-            
 
         }
 

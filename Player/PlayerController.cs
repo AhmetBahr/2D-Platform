@@ -11,6 +11,11 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed = 10.0f;
     public float jumpForce = 8.0f;
     public float groundCheckRadius;
+    public float wallCheckDistance;
+    public float wallSlideSpeed;
+    public float movementForceInAir;
+    public float arDragMultiplier = 0.95f;
+    public float variableJumpHeightMultip = 0.5f;
 
     private int amountOfJumpsLeft;
     public int amountOfJumps = 2;
@@ -18,8 +23,11 @@ public class PlayerController : MonoBehaviour
     private bool isFactingRight = true;
     private bool isWalking;
     public bool isGrounded;
+    private bool isTouchingWall;
     public bool canJump;
+    private bool isWallSliding;
 
+    public Transform wallCheck;
     public Transform groundCheck;
 
     private Rigidbody2D rb;
@@ -40,6 +48,7 @@ public class PlayerController : MonoBehaviour
         CheckMovementDirection();
         UpdateAnimation();
         CheckIfCanJump();
+        ChecIfWallSlider();
     }
 
 
@@ -52,6 +61,8 @@ public class PlayerController : MonoBehaviour
     void CheckSurrounings()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatiIsGround);
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatiIsGround);
+
     }
 
     private void CheckMovementDirection()
@@ -76,7 +87,7 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isWalk", isWalking);
         anim.SetBool("isGrounded", isGrounded);
         anim.SetFloat("yVelocity", rb.velocity.y);
-
+        anim.SetBool("isWallSliding" , isWallSliding); // Not: Sliding animasyonu yok 
     }
 
     void CheckInput()
@@ -87,6 +98,26 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
             amountOfJumpsLeft--;
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * variableJumpHeightMultip); 
+        }
+
+
+    }
+
+
+    void ChecIfWallSlider()
+    {
+        if(isTouchingWall && !isGrounded && rb.velocity.y < 0)
+        {
+            isWallSliding = true;
+        }
+        else
+        {
+            isWallSliding = false;
         }
 
     }
@@ -124,18 +155,53 @@ public class PlayerController : MonoBehaviour
 
     void ApplyMovment()
     {
-        rb.velocity = new Vector2(movementSpeed * movementInputDirection, rb.velocity.y);
+      
+         if (isGrounded)
+         {
+             rb.velocity = new Vector2(movementSpeed * movementInputDirection, rb.velocity.y);
+
+         }
+         else if(!isGrounded && !isWallSliding && movementInputDirection != 0)
+         {
+            Vector2 forceToAdd = new Vector2(movementForceInAir * movementInputDirection, 0);
+            rb.AddForce(forceToAdd);
+
+            if(Mathf.Abs(rb.velocity.x) > movementSpeed)
+            {
+                rb.velocity = new Vector2(movementSpeed * movementInputDirection, rb.velocity.y);
+            }
+
+
+         }
+         else if(!isGrounded && !isWallSliding && movementInputDirection == 0)
+        {
+            rb.velocity = new Vector2(movementSpeed * arDragMultiplier, rb.velocity.y);
+            
+        }
+
+
+        if (isWallSliding)
+        {
+            if(rb.velocity.y < -wallSlideSpeed)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
+            }
+        }
+    
     }
 
     void Flip()
     {
-        isFactingRight = !isFactingRight;
-        transform.Rotate(0.0f, 180.0f, 0.0f);
+        if (!isWallSliding)
+        {
+            isFactingRight = !isFactingRight;
+            transform.Rotate(0.0f, 180.0f, 0.0f);
+        }
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x+ wallCheckDistance,wallCheck.position.y,wallCheck.position.z));
     }
 
 }

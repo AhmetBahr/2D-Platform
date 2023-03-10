@@ -12,6 +12,7 @@ public class Enemy_Sidesaw : MonoBehaviour
     private float leftEdge;
     private float rightEdge;
 
+
     private void Awake()
     {
         leftEdge = transform.position.x - movementDistance;
@@ -46,9 +47,11 @@ public class Enemy_Sidesaw : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            collision.GetComponent<Health>().TakeDamage(damge); 
-
+              collision.GetComponent<Health>().TakeDamage(damge);
+            //  DecreaseHealth();
         }
+
+
 
 
     }

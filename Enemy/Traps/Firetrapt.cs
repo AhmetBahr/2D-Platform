@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Firetrapt : MonoBehaviour
 {
-    [SerializeField] private float damage;
+  //  [SerializeField] private float damage;
 
 
     [Header ("Timer")]
@@ -17,6 +17,7 @@ public class Firetrapt : MonoBehaviour
     private bool active; //Ne zaman saldýrýya hazýr hale gelicek    
 
     private Health playerHealth;
+    [SerializeField] private GameObject damageObject;
 
 
     private void Awake()
@@ -28,10 +29,10 @@ public class Firetrapt : MonoBehaviour
     }
     private void Update()
     {
-        if (playerHealth != null && active)
-            playerHealth.TakeDamage(damage);
+        /*    if (playerHealth != null && active)
+                playerHealth.TakeDamage(damage);
+        */
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -45,7 +46,7 @@ public class Firetrapt : MonoBehaviour
             }
             if(active)
             {
-                collision.GetComponent<Health>().TakeDamage(damage);
+              //  collision.GetComponent<Health>().TakeDamage(damage);
             }
         }
 
@@ -66,14 +67,30 @@ public class Firetrapt : MonoBehaviour
         yield return new WaitForSeconds(activationDelay);
         spriteRend.color= Color.white; //Normal
         active= true;
+        damageObject.SetActive(true);
         anim.SetBool("Activated", true);
 
        
         yield return new WaitForSeconds( activationTime);
         active= false;
         triggered= false;
+        damageObject.SetActive(false);
         anim.SetBool("Activated", false);
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

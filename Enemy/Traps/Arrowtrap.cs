@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class Arrowtrap : MonoBehaviour
 {
+    [Header("Cooldown")]
     [SerializeField] private float attackCooldown;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject[] arrows;
     private float cooldownTimer;
+
+    [Header("Tranfom")]
+    [SerializeField] private Transform firePoint;
+    [Header("Arrows")]
+    [SerializeField] private GameObject[] arrows;
 
     private void Attack()
     {

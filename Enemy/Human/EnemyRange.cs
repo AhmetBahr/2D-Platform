@@ -53,7 +53,7 @@ public class EnemyRange : MonoBehaviour
     {
         cooldownTimer = 0;
         fireballs[FindFireball()].transform.position = firepoint.position;
-        fireballs[FindFireball()].GetComponent<EnemyProjectile>().ActivateProjectile();
+     //   fireballs[FindFireball()].GetComponent<EnemyProjectile>().ActivateProjectile();
     }
     private int FindFireball()
     {

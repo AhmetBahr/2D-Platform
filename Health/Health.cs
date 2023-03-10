@@ -13,6 +13,10 @@ public class Health : MonoBehaviour
     private Animator anim;
     private bool dead;
 
+    [Header("Efect")]
+    [SerializeField] private GameObject deathChunkParticle;
+    [SerializeField] private GameObject deathBloodParticle;
+
     [Header("iFrames")]
     [SerializeField] private float iFramesDuration;
     [SerializeField] private float numberOffFlashes;
@@ -21,6 +25,9 @@ public class Health : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Behaviour[] components;
     private bool invulnerable;
+
+    private GameManager GM;
+
 
     private void Awake()
     {
@@ -97,14 +104,21 @@ public class Health : MonoBehaviour
     }
     public void Respawn()
     {
-        AddHealth(startingHealth);
-        anim.ResetTrigger("Die");
-        anim.Play("Idle");
-        StartCoroutine(Invunerability());
+           AddHealth(startingHealth);
+           anim.ResetTrigger("Die");
+           anim.Play("Idle");
+           StartCoroutine(Invunerability());
 
-        //Activate all attached component classes
-        foreach (Behaviour component in components)
-            component.enabled = true;
+           //Activate all attached component classes
+           foreach (Behaviour component in components)
+               component.enabled = true;
+        
+
+        Instantiate(deathChunkParticle, transform.position, deathChunkParticle.transform.rotation);
+        Instantiate(deathBloodParticle, transform.position, deathBloodParticle.transform.rotation);
+      //  GM.Respawn();
+        Destroy(gameObject);
+
     }
 
 

@@ -1,11 +1,15 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCombatController : MonoBehaviour
 {
     [SerializeField] private bool combatEnabled;
-    [SerializeField] private float inputTimer, attack1Radius, attack1Damage;
+    [SerializeField] private float inputTimer;
+    [SerializeField] private float attack1Radius;
+    [SerializeField] private float attack1Damage;
+    [SerializeField] private float stunDamageAmount = 1f;
+
     [SerializeField] private Transform attack1HitBoxPos;
     [SerializeField] private LayerMask whatIsDamageable;
     
@@ -13,12 +17,14 @@ public class PlayerCombatController : MonoBehaviour
 
     private float lastInputTime = Mathf.NegativeInfinity;
 
-    private float[] attackDetails = new float[2];
+    private AttacksDeatls attackDetails;
 
     private Animator anim;
 
     private PlayerController PC;
     private PlayerStats PS;
+
+     
 
     private void Start()
     {
@@ -74,8 +80,9 @@ public class PlayerCombatController : MonoBehaviour
     {
         Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitBoxPos.position, attack1Radius, whatIsDamageable);
 
-        attackDetails[0] = attack1Damage;
-        attackDetails[1] = transform.position.x;
+        attackDetails.damageAmount = attack1Damage;
+        attackDetails.positon = transform.position;
+        attackDetails.stunDamageAmount = stunDamageAmount;
 
         foreach (Collider2D collider in detectedObjects)
         {
@@ -91,15 +98,15 @@ public class PlayerCombatController : MonoBehaviour
         anim.SetBool("attack1", false);
     }
 
-    private void Damage(float[] attackDetails)
+    private void Damage(AttacksDeatls attackDetails)
     {
         if (!PC.GetDashStatus())
         {
             int direction;
 
-            PS.DecreaseHealth(attackDetails[0]);
+            PS.DecreaseHealth(attackDetails.damageAmount);
 
-            if (attackDetails[1] < transform.position.x)
+            if (attackDetails.positon.x < transform.position.x)
             {
                 direction = 1;
             }

@@ -30,6 +30,8 @@ public class EnemyProjectile : MonoBehaviour
 
     }
 
+
+
     private void Update()
     {
         if (hit) return;

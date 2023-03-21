@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class PlayerCombatController : MonoBehaviour
 {
-    [SerializeField]
-    private bool combatEnabled;
-    [SerializeField]
-    private float inputTimer, attack1Radius, attack1Damage;
-    [SerializeField]
-    private Transform attack1HitBoxPos;
-    [SerializeField]
-    private LayerMask whatIsDamageable;
+    [SerializeField] private bool combatEnabled;
+    [SerializeField] private float inputTimer;
+    [SerializeField] private float attack1Radius;
+    [SerializeField] private float attack1Damage;
+    [SerializeField] private float stunDamageAmount = 1f;
+    [SerializeField] private Transform attack1HitBoxPos;
+    [SerializeField] private LayerMask whatIsDamageable;
     
+
+
     private bool gotInput, isAttacking, isFirstAttack;
 
     private float lastInputTime = Mathf.NegativeInfinity;
 
-    private float[] attackDetails = new float[2];
+    // private float[] attackDetails = new float[2];
+
+    private AttackDetails attackDetails;
 
     private Animator anim;
 
@@ -44,7 +47,6 @@ public class PlayerCombatController : MonoBehaviour
         {
             if (combatEnabled)
             {
-                //Attempt combat
                 gotInput = true;
                 lastInputTime = Time.time;
             }
@@ -55,7 +57,6 @@ public class PlayerCombatController : MonoBehaviour
     {
         if (gotInput)
         {
-            //Perform Attack1
             if (!isAttacking)
             {
                 gotInput = false;
@@ -69,7 +70,6 @@ public class PlayerCombatController : MonoBehaviour
 
         if(Time.time >= lastInputTime + inputTimer)
         {
-            //Wait for new input
             gotInput = false;
         }
     }
@@ -78,13 +78,13 @@ public class PlayerCombatController : MonoBehaviour
     {
         Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitBoxPos.position, attack1Radius, whatIsDamageable);
 
-        attackDetails[0] = attack1Damage;
-        attackDetails[1] = transform.position.x;
+        attackDetails.damageAmount = attack1Damage;
+        attackDetails.position = transform.position;
+        attackDetails.stunDamageAmount = stunDamageAmount;
 
         foreach (Collider2D collider in detectedObjects)
         {
             collider.transform.parent.SendMessage("Damage", attackDetails);
-            //Instantiate hit particle
         }
     }
 
@@ -95,15 +95,15 @@ public class PlayerCombatController : MonoBehaviour
         anim.SetBool("attack1", false);
     }
 
-    private void Damage(float[] attackDetails)
+    private void Damage(AttackDetails attackDetails)
     {
         if (!PC.GetDashStatus())
         {
             int direction;
 
-            PS.DecreaseHealth(attackDetails[0]);
+            PS.DecreaseHealth(attackDetails.damageAmount);
 
-            if (attackDetails[1] < transform.position.x)
+            if (attackDetails.position.x < transform.position.x)
             {
                 direction = 1;
             }

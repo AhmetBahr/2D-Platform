@@ -10,7 +10,7 @@ public class Enemy2 : Entity
     public E2_Attack_Melle_State meleeAttackState { get; private set; }
     public E2_LookForPlayerState lookForPlayerState { get; private set; }
     public E2_StunState stunState { get; private set; }
-  //  public E2_DeadState deadState { get; private set; }
+    public E2_DeathSatate deadState { get; private set; }
 
     [SerializeField] private D_MoveState moveStateData;
     [SerializeField] private D_IdleState idleStateData;
@@ -18,7 +18,7 @@ public class Enemy2 : Entity
     [SerializeField] private D_Attack_Melee_State meleeAttackStateData;
     [SerializeField] private D_LookForPlayerState lookForPlayerStateData;
     [SerializeField] private D_StunsState stunStateData;
-  //  [SerializeField] private D_DeadState deadStateData;
+    [SerializeField] private D_DeadState deadStateData;
 
     [SerializeField] private Transform meleeAttackPosition;
 
@@ -32,7 +32,7 @@ public class Enemy2 : Entity
         meleeAttackState = new E2_Attack_Melle_State(this, stateMachine, "meleeAttack", meleeAttackPosition, meleeAttackStateData, this);
         lookForPlayerState = new E2_LookForPlayerState(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new E2_StunState(this, stateMachine, "stun", stunStateData, this);
-      //  deadState = new E2_DeadState(this, stateMachine, "dead", deadStateData, this);
+        deadState = new E2_DeathSatate(this, stateMachine, "dead", deadStateData, this);
 
         stateMachine.Initialize(moveState);
     }
@@ -41,7 +41,7 @@ public class Enemy2 : Entity
     {
         base.Damage(attackDetails);
 
-     /*  if (isDead)
+       if (isDead)
        {
             stateMachine.ChangeState(deadState);
         }
@@ -53,7 +53,7 @@ public class Enemy2 : Entity
         {
             lookForPlayerState.SetTurnImmediately(true);
             stateMachine.ChangeState(lookForPlayerState);
-        }*/
+        }
     }
 
     public override void OnDrawGizmos()

@@ -7,12 +7,9 @@ public class Enemy1 : Entity
 
     public E1_IdleState idleState { get; private set; }
     public E1_MoveState moveState { get; private set; }
-
     public E1_PlayerDetectedState playerDetectedState { get; private set; }
-
     public E1_ChargeState chargeState { get; private set; }
     public E1_LookForPlayerState lookForPlayerState { get; private set; }
-
     public E1_Attack_Melle_State meleAttacksState { get; private set; }
     public E1_StunState stunState { get; private set; }
     public E1_DeathState deadState { get; private set; }

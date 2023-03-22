@@ -16,14 +16,10 @@ public class Entity : MonoBehaviour
     public AnimationToStatemachine atsm { get; private set; }
     public int lastDamageDirection { get; private set; }
 
-    [SerializeField]
-    private Transform wallCheck;
-    [SerializeField]
-    private Transform ledgeCheck;
-    [SerializeField]
-    private Transform playerCheck;
-    [SerializeField]
-    private Transform groundCheck;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private Transform ledgeCheck;
+    [SerializeField] private Transform playerCheck;
+    [SerializeField] private Transform groundCheck;
 
     private float currentHealth;
     private float currentStunResistance;

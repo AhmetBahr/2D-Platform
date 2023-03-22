@@ -312,7 +312,7 @@ public class BasicEnemyController : MonoBehaviour
 
 
 
-    private float[] attackDetails = new float[2];
+    private AttackDetails attackDetails;
     private int facingDirection;
     private int damageDirection;
 
@@ -355,7 +355,6 @@ public class BasicEnemyController : MonoBehaviour
         }
     }
 
-    //--WALKING STATE--------------------------------------------------------------------------------
 
     private void EnterMovingState()
     {
@@ -385,7 +384,6 @@ public class BasicEnemyController : MonoBehaviour
 
     }
 
-    //--KNOCKBACK STATE-------------------------------------------------------------------------------
 
     private void EnterKnockbackState()
     {
@@ -408,7 +406,6 @@ public class BasicEnemyController : MonoBehaviour
         aliveAnim.SetBool("Knockback", false);
     }
 
-    //--DEAD STATE---------------------------------------------------------------------------------------
 
     private void EnterDeadState()
     {
@@ -427,15 +424,14 @@ public class BasicEnemyController : MonoBehaviour
 
     }
 
-    //--OTHER FUNCTIONS--------------------------------------------------------------------------------
 
-    private void Damage(float[] attackDetails)
+    private void Damage(AttackDetails attackDetails)
     {
-        currentHealth -= attackDetails[0];
+        currentHealth -= attackDetails.damageAmount;
 
         Instantiate(hitParticle, alive.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
 
-        if (attackDetails[1] > alive.transform.position.x)
+        if (attackDetails.position.x > alive.transform.position.x)
         {
             damageDirection = -1;
         }
@@ -444,7 +440,6 @@ public class BasicEnemyController : MonoBehaviour
             damageDirection = 1;
         }
 
-        //Hit particle
 
         if (currentHealth > 0.0f)
         {
@@ -468,8 +463,8 @@ public class BasicEnemyController : MonoBehaviour
             if (hit != null)
             {
                 lastTouchDamageTime = Time.time;
-                attackDetails[0] = touchDamage;
-                attackDetails[1] = alive.transform.position.x;
+                attackDetails.damageAmount = touchDamage;
+                attackDetails.position.x = alive.transform.position.x;
                 hit.SendMessage("Damage", attackDetails);
             }
         }

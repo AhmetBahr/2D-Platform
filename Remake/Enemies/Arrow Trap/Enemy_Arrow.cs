@@ -25,7 +25,8 @@ public class Enemy_Arrow : MonoBehaviour
     [SerializeField] private LayerMask whatIsPlayer;
 
 
-    private float[] attackDetails = new float[2];
+    //private float[] attackDetails = new float[2];
+    private AttackDetails attackDetails;
 
     private int damageDirection;
 
@@ -77,11 +78,11 @@ public class Enemy_Arrow : MonoBehaviour
 
 
 
-    private void Damage(float[] attackDetails)
+    private void Damage(AttackDetails attackDetails)
     {
 
 
-        if (attackDetails[1] > alive.transform.position.x)
+        if (attackDetails.position.x > alive.transform.position.x)
         {
             damageDirection = -1;
         }
@@ -110,8 +111,8 @@ public class Enemy_Arrow : MonoBehaviour
             if (hit != null)
             {
                 lastTouchDamageTime = Time.time;
-                attackDetails[0] = touchDamage;
-                attackDetails[1] = alive.transform.position.x;
+                attackDetails.damageAmount = touchDamage;
+                attackDetails.position.x = alive.transform.position.x;
                 hit.SendMessage("Damage", attackDetails);
                 gameObject.SetActive(false);
             }
@@ -126,8 +127,8 @@ public class Enemy_Arrow : MonoBehaviour
         if(other.tag == "Ground")
         {
             lastTouchDamageTime = Time.time;
-            attackDetails[0] = touchDamage;
-            attackDetails[1] = alive.transform.position.x;
+            attackDetails.damageAmount = touchDamage;
+            attackDetails.position.x = alive.transform.position.x;
             gameObject.SetActive(false);
 
         }

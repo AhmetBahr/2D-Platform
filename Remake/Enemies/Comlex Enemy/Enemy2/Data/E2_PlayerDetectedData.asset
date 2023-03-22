@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc365e1055c222c4390637c774c04c24, type: 3}
-  m_Name: E1_LookForPlayerData
+  m_Script: {fileID: 11500000, guid: 30573a08f2e15fc4e98fcdfd65ab6f8a, type: 3}
+  m_Name: E2_PlayerDetectedData
   m_EditorClassIdentifier: 
-  amountOfTurns: 1
-  timeBetweenTurns: 0.5
+  longRangeActionTime: 1.5

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30513c234584d7d439acac72d62c1978, type: 3}
   m_Name: E1_IdleData
   m_EditorClassIdentifier: 
-  minIdleTime: 1
-  maxIdleTime: 2
+  minIdleTime: 0.5
+  maxIdleTime: 1

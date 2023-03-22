@@ -26,7 +26,9 @@ public class Basic_Firetrap_Damage : MonoBehaviour
     [Header("Layer")]
     [SerializeField] private LayerMask whatIsPlayer;
 
-    private float[] attackDetails = new float[2];
+    // private float[] attackDetails = new float[2];
+
+    private AttackDetails attackDetails;
 
     private int damageDirection;
 
@@ -60,9 +62,9 @@ public class Basic_Firetrap_Damage : MonoBehaviour
 
     }
 
-    private void Damage(float[] attackDetails)
+    private void Damage(AttackDetails attackDetails)
     {
-        if (attackDetails[1] > alive.transform.position.x)
+        if (attackDetails.position.x > alive.transform.position.x)
         {
             damageDirection = -1;
         }
@@ -91,8 +93,8 @@ public class Basic_Firetrap_Damage : MonoBehaviour
             if (hit != null)
             {
                 lastTouchDamageTime = Time.time;
-                attackDetails[0] = touchDamage;
-                attackDetails[1] = alive.transform.position.x;
+                attackDetails.damageAmount = touchDamage;
+                attackDetails.position.x = alive.transform.position.x;
                 hit.SendMessage("Damage", attackDetails);
             }
         }

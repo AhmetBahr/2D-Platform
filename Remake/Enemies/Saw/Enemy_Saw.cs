@@ -40,7 +40,9 @@ public class Enemy_Saw : MonoBehaviour
     [SerializeField] private GameObject deathBloodParticle;
     */
 
-    private float[] attackDetails = new float[2];
+    //  private float[] attackDetails = new float[2];
+    private AttackDetails attackDetails;
+
 
     private int damageDirection;
     private Vector2 movement;
@@ -110,7 +112,6 @@ public class Enemy_Saw : MonoBehaviour
     private void Damage(float[] attackDetails)
     {
 
-      //  Instantiate(hitParticle, alive.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
 
         if (attackDetails[1] > alive.transform.position.x)
         {
@@ -133,8 +134,8 @@ public class Enemy_Saw : MonoBehaviour
             if (hit != null)
             {
                 lastTouchDamageTime = Time.time;
-                attackDetails[0] = touchDamage;
-                attackDetails[1] = alive.transform.position.x;
+                attackDetails.damageAmount = touchDamage;
+                attackDetails.position.x = alive.transform.position.x;
                 hit.SendMessage("Damage", attackDetails);
             }
         }

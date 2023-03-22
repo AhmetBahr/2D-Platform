@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc365e1055c222c4390637c774c04c24, type: 3}
-  m_Name: E1_LookForPlayerData
+  m_Script: {fileID: 11500000, guid: cdf61aebf18ea5242935100adca85ccc, type: 3}
+  m_Name: E2_MelleAttackData
   m_EditorClassIdentifier: 
-  amountOfTurns: 1
-  timeBetweenTurns: 0.5
+  attackRadius: 0.3
+  attackDamage: 10
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 128

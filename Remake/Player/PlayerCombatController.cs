@@ -4,21 +4,36 @@ using UnityEngine;
 
 public class PlayerCombatController : MonoBehaviour
 {
-    [SerializeField] private bool combatEnabled;
-    [SerializeField] private float inputTimer;
+
+    [Header("Attack")]
     [SerializeField] private float attack1Radius;
     [SerializeField] private float attack1Damage;
+
+
+
+    [Header("Stun")]
     [SerializeField] private float stunDamageAmount = 1f;
+
+    [Header("Timer")]
+    [SerializeField] private float inputTimer;
+
+
+
+    [Header("Enable")]
+    [SerializeField] private bool combatEnabled;
+
+    [Header("Position")]
     [SerializeField] private Transform attack1HitBoxPos;
+
+    [Header("Layer")]
     [SerializeField] private LayerMask whatIsDamageable;
-    
 
-
-    private bool gotInput, isAttacking, isFirstAttack;
 
     private float lastInputTime = Mathf.NegativeInfinity;
 
-    // private float[] attackDetails = new float[2];
+    private bool gotInput;
+    private bool isAttacking;
+    private bool isFirstAttack;
 
     private AttackDetails attackDetails;
 

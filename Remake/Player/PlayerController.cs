@@ -4,29 +4,80 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    private float movementInputDirection;
-    private float jumpTimer;
+    [Header("Core")]
+    public float movementSpeed = 10.0f;
+    public float jumpForce = 16.0f;
     private float turnTimer;
     private float wallJumpTimer;
+
+    [Header("Jump")]
+    public float jumpTimerSet = 0.15f;
+    public float turnTimerSet = 0.1f;
+
+    public int amountOfJumps = 1;
+
+
+    [Header("WallJump")]
+    public float wallHopForce;
+    public float wallJumpForce;
+    public float wallJumpTimerSet = 0.5f;
+    public float wallSlideSpeed;
+    public float airDragMultiplier = 0.95f;
+    public float variableJumpHeightMultiplier = 0.5f;
+    public float movementForceInAir;
+
+    public Vector2 wallHopDirection;
+    public Vector2 wallJumpDirection;
+
+    [Header("Knocback")]
+    [SerializeField] private float knockbackDuration;
+    [SerializeField] private float knockbackStartTime; 
+    [SerializeField] private Vector2 knockbackSpeed;
+
+
+    [Header("Dash")]
+    private bool isDashing;
     private float dashTimeLeft;
     private float lastImageXpos;
     private float lastDash = -100f;
-    private float knockbackStartTime;
-    [SerializeField]
-    private float knockbackDuration;
+    public float dashTime;
+    public float dashSpeed;
+    public float distanceBetweenImages;
+    public float dashCoolDown;
 
-    private int amountOfJumpsLeft;
+
+    [Header("Check")]
+    public float groundCheckRadius;
+    public float wallCheckDistance;
+
+
+    [Header("Ledge")]
+    public float ledgeClimbXOffset1 = 0f;
+    public float ledgeClimbYOffset1 = 0f;
+    public float ledgeClimbXOffset2 = 0f;
+    public float ledgeClimbYOffset2 = 0f;
+
+    [Header("Trasnform")]
+    public Transform groundCheck;
+    public Transform wallCheck;
+    public Transform ledgeCheck;
+
+    [Header("Layer")]
+    public LayerMask whatIsGround;
+
+    private float movementInputDirection;
+    private float jumpTimer;
+
     private int facingDirection = 1;
     private int lastWallJumpDirection;
+    private int amountOfJumpsLeft;
+
 
     private bool isFacingRight = true;
     private bool isWalking;
     private bool isGrounded;
     private bool isTouchingWall;
     private bool isWallSliding;
-    private bool canNormalJump;
-    private bool canWallJump;
     private bool isAttemptingToJump;
     private bool checkJumpMultiplier;
     private bool canMove;
@@ -35,11 +86,9 @@ public class PlayerController : MonoBehaviour
     private bool isTouchingLedge;
     private bool canClimbLedge = false;
     private bool ledgeDetected;
-    private bool isDashing;
-    private bool knockback;
-
-    [SerializeField]
-    private Vector2 knockbackSpeed;
+    private bool knockback; 
+    private bool canNormalJump;
+    private bool canWallJump;
 
     private Vector2 ledgePosBot;
     private Vector2 ledgePos1;
@@ -48,40 +97,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
-    public int amountOfJumps = 1;
-
-    public float movementSpeed = 10.0f;
-    public float jumpForce = 16.0f;
-    public float groundCheckRadius;
-    public float wallCheckDistance;
-    public float wallSlideSpeed;
-    public float movementForceInAir;
-    public float airDragMultiplier = 0.95f;
-    public float variableJumpHeightMultiplier = 0.5f;
-    public float wallHopForce;
-    public float wallJumpForce;
-    public float jumpTimerSet = 0.15f;
-    public float turnTimerSet = 0.1f;
-    public float wallJumpTimerSet = 0.5f;
-    public float ledgeClimbXOffset1 = 0f;
-    public float ledgeClimbYOffset1 = 0f;
-    public float ledgeClimbXOffset2 = 0f;
-    public float ledgeClimbYOffset2 = 0f;
-    public float dashTime;
-    public float dashSpeed;
-    public float distanceBetweenImages;
-    public float dashCoolDown;
-
-    public Vector2 wallHopDirection;
-    public Vector2 wallJumpDirection;
-
-    public Transform groundCheck;
-    public Transform wallCheck;
-    public Transform ledgeCheck;
-
-    public LayerMask whatIsGround;
-
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -91,7 +106,6 @@ public class PlayerController : MonoBehaviour
         wallJumpDirection.Normalize();
     }
 
-    // Update is called once per frame
     void Update()
     {
         CheckInput();

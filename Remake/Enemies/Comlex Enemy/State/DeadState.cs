@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class DeadState : State
+public class DeadState : AttackState
 {
     protected D_DeadState stateData;
 

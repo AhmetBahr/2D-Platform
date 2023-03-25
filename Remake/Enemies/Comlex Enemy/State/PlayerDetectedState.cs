@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class PlayerDetectedState : State
+public class PlayerDetectedState : AttackState
 {
     protected D_PlayerDetectedState stateDate;
 

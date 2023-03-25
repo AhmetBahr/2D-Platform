@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class LookForPlayerSatate : State
+public class LookForPlayerSatate : AttackState
 {
     protected D_LookForPlayerState stateData;
 

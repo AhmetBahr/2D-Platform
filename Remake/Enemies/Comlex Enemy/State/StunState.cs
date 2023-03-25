@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class StunState : State
+public class StunState : AttackState
 {
     protected D_StunsState stateData;
 

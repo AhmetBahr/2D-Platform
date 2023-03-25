@@ -15,6 +15,10 @@ public class AttackState : State
         this.attackPosition = attackPosition;
     }
 
+    public AttackState(Entity etity, FinisStateMachine stateMachine, string animBoolName) : base(etity, stateMachine, animBoolName)
+    {
+    }
+
     public override void DoChecks()
     {
         base.DoChecks();
@@ -26,7 +30,7 @@ public class AttackState : State
     {
         base.Enter();
 
-        entity.atsm.attackState= this;
+        entity.atsm.attackState = this;
         isAnimationFinished = false;
         entity.SetVelocity(0f);
     }

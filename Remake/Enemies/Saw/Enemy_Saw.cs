@@ -33,14 +33,7 @@ public class Enemy_Saw : MonoBehaviour
     [Header("Layer")]
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private LayerMask whatIsPlayer;
-    /*
-    [Header("Particile")]
-    [SerializeField] private GameObject hitParticle;
-    [SerializeField] private GameObject deathChunkParticle;
-    [SerializeField] private GameObject deathBloodParticle;
-    */
 
-    //  private float[] attackDetails = new float[2];
     private AttackDetails attackDetails;
 
 
@@ -109,11 +102,11 @@ public class Enemy_Saw : MonoBehaviour
 
     }
 
-    private void Damage(float[] attackDetails)
+    private void Damage(AttackDetails attackDetails)
     {
 
 
-        if (attackDetails[1] > alive.transform.position.x)
+        if (attackDetails.position.x > alive.transform.position.x)
         {
             damageDirection = -1;
         }

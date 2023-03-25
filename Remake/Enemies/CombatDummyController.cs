@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class CombatDummyController : MonoBehaviour
 {
-    [SerializeField]
-    private float maxHealth, knockbackSpeedX, knockbackSpeedY, knockbackDuration, knockbackDeathSpeedX, knockbackDeathSpeedY, deathTorque;
-    [SerializeField]
-    private bool applyKnockback;
-    [SerializeField]
-    private GameObject hitParticle;
+    [SerializeField] private float maxHealth;
+    [SerializeField] private float knockbackSpeedX;
+    [SerializeField] private float knockbackSpeedY;
+    [SerializeField] private float knockbackDuration;
+    [SerializeField] private float knockbackDeathSpeedX;
+    [SerializeField] private float knockbackDeathSpeedY;
+    [SerializeField] private float deathTorque;
+
+    [SerializeField] private bool applyKnockback;
+    [SerializeField] private GameObject hitParticle;
 
     private float currentHealth, knockbackStart;
 
@@ -25,8 +29,6 @@ public class CombatDummyController : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-
-
 
         aliveGO = transform.Find("Alive").gameObject;
         brokenTopGO = transform.Find("Broken Top").gameObject;
@@ -76,13 +78,11 @@ public class CombatDummyController : MonoBehaviour
 
         if(applyKnockback && currentHealth > 0.0f)
         {
-            //Knockback
             Knockback();
         }
 
         if(currentHealth <= 0.0f)
         {
-            //Die
             Die();
         }
     }

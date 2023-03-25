@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class DodgeState : State
+public class DodgeState : AttackState
 {
     protected D_DodgeState stateData;
 

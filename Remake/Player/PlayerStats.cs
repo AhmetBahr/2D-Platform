@@ -13,7 +13,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private GameObject deathChunkParticle;
     [SerializeField] private GameObject deathBloodParticle;
 
-    public HealthBar healtBar;
+    HealthBar healtBar;
 
     private float currentHealth;
 
@@ -23,9 +23,12 @@ public class PlayerStats : MonoBehaviour
     {
         currentHealth = maxHealth;
 
+        healtBar = GameObject.Find("Health Bar").GetComponent<HealthBar>();
+
         healtBar.SetMaxHealth(maxHealth);
 
         GM = GameObject.Find("GameManager").GetComponent<GameManager>();
+       
     }
 
     public void DecreaseHealth(float amount)

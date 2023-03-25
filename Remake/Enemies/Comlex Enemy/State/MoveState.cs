@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class MoveState : State
+public class MoveState : AttackState
 {
     protected D_MoveState stateData;
 

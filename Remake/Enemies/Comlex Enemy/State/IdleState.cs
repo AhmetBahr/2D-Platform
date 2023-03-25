@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class IdleState : State
+public class IdleState : AttackState
 {
     protected D_IdleState stateData;
 

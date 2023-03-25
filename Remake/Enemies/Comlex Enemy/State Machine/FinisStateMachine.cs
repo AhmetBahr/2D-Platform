@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class FinisStateMachine
 {
-  public State currentState { get; private set; }
+  public AttackState currentState { get; private set; }
 
-    public void Initialize(State startingState)
+    public void Initialize(AttackState startingState)
     {
         currentState = startingState;
         currentState.Enter();
     }
-    public void ChangeState(State newState) 
+    public void ChangeState(AttackState newState) 
     {
         currentState.Exit();
         currentState = newState;    

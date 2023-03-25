@@ -8,6 +8,8 @@ public class PlayerCombatController : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private float attack1Radius;
     [SerializeField] private float attack1Damage;
+    [SerializeField] private float attack2Damage;
+
 
 
 
@@ -85,7 +87,19 @@ public class PlayerCombatController : MonoBehaviour
 
         if(Time.time >= lastInputTime + inputTimer)
         {
-            gotInput = false;
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (!isAttacking)
+                {
+                    gotInput = false;
+                    isAttacking = true;
+                    isFirstAttack = !isFirstAttack;
+                    anim.SetBool("attack2", true);
+                    anim.SetBool("secAttack", isFirstAttack);
+                    anim.SetBool("isAttacking", isAttacking);
+                }
+            }
+                gotInput = false;
         }
     }
 

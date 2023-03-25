@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class ChargeState : State
+public class ChargeState : AttackState
 {
     protected D_CahargeState stateData;
     protected bool isPlayerInMinArgoRange;

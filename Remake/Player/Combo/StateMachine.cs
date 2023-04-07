@@ -9,7 +9,6 @@ public class StateMachine : MonoBehaviour
     public ComboState CurrentState { get; private set; }
     private ComboState nextState;
 
-    // Update is called once per frame
     void Update()
     {
         if (nextState != null)

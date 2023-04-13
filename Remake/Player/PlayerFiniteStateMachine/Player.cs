@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
+    public PlayerJumpstate jumpState { get; private set; }
+    public PlayerAirState InAirState { get; private set; }    
+    public PlayerLandState LandState { get; private set; }  
 
 
     [SerializeField] private PlayerData playerData;
@@ -24,11 +27,19 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    #region Check Transform
+
+    [SerializeField] private Transform groundCheck;
+
+    #endregion
+
     #region Others
     public Vector2 CurrentVelocity { get; private set; }
     public int FaceingDirection { get; private set; }
 
     private Vector2 workspace;
+
+
 
     #endregion
 
@@ -36,8 +47,12 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         StateMachine = new PlayerStateMachine();
+
         IdleState = new PlayerIdleState(this, StateMachine, playerData, "idle");
         MoveState = new PlayerMoveState(this, StateMachine, playerData, "move");
+        jumpState = new PlayerJumpstate(this, StateMachine, playerData, "inAir");
+        InAirState = new PlayerAirState(this, StateMachine, playerData, "inAir");
+        LandState = new PlayerLandState(this, StateMachine, playerData, "land");
 
 
     }
@@ -80,6 +95,13 @@ public class Player : MonoBehaviour
 
     }
 
+    public void SetVelocityY(float velocity)
+    {
+        workspace.Set(CurrentVelocity.x, velocity);
+        RB.velocity = workspace;
+        CurrentVelocity = workspace;
+    }
+
     #endregion
 
     #region Check Function
@@ -93,6 +115,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool CheckIfGround()
+    {
+
+        return Physics2D.OverlapCircle(groundCheck.position, playerData.GroundCheckRadius, playerData.WhatIsGround);
+
+        
+    }
+
     #endregion
 
     #region Other Function
@@ -101,5 +131,10 @@ public class Player : MonoBehaviour
         FaceingDirection *= -1;
         transform.Rotate(0.0f, 180.0f, 0.0f);
     }
+
+    private void AnimatonTrigger() => StateMachine.CurrentState.AnimationTrigger();
+
+    private void AnimatonFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
+
     #endregion
 }

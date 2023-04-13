@@ -39,15 +39,6 @@ public class PlayerMoveState : PlayerGroundedState
         }
     }
 
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    public override void OnEnable()
-    {
-        base.OnEnable();
-    }
 
     public override void PhysicsUpdate()
     {

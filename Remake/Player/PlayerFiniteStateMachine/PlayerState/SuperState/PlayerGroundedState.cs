@@ -6,6 +6,7 @@ public class PlayerGroundedState : PlayerState
 {
     protected int  Xinput;
 
+    private bool jumpInput;
     public PlayerGroundedState(Player player, PlayerStateMachine stateMachine, PlayerData playerDate, string animBoolName) : 
         base(player, stateMachine, playerDate, animBoolName)
     {
@@ -20,6 +21,7 @@ public class PlayerGroundedState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.jumpState.ResetAmountOfJumpsLeft();
     }
 
     public override void Exit()
@@ -32,17 +34,14 @@ public class PlayerGroundedState : PlayerState
         base.LogicUpdate();
 
         Xinput = player.InputHandler.NormInputX;
+        jumpInput = player.InputHandler.JumpInput;
 
-    }
+        if (jumpInput && player.jumpState.CanJump())
+        {
+            player.InputHandler.UseJumpInput();
+            stateMachine.ChangeState(player.jumpState);
+        }
 
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    public override void OnEnable()
-    {
-        base.OnEnable();
     }
 
     public override void PhysicsUpdate()
